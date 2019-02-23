@@ -29,10 +29,13 @@ def get(url, brand):
             dict[carnames[i]].append(dd.text)
         i = i + 1
 
-    driver.close()
-    data = pd.DataFrame.from_dict(dict)
-    cols = data.columns.tolist()
-    cols.insert(0, cols.pop(cols.index('Name')))
-    df = data.reindex(columns=cols)
-    df.to_csv(filepath, encoding='utf_8_sig', index=False)
-    print(pageres.select('.summary-top-name')[1].text.strip(" "), " done")
+    try:
+        data = pd.DataFrame.from_dict(dict)
+    except:
+        print("Error ! 請確認", url, "該網頁中是否有重複的車子名稱")
+    else:
+        cols = data.columns.tolist()
+        cols.insert(0, cols.pop(cols.index('Name')))
+        df = data.reindex(columns=cols)
+        df.to_csv(filepath, encoding='utf_8_sig', index=False)
+        print(pageres.select('.summary-top-name')[1].text.strip(" "), " done")
